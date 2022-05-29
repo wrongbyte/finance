@@ -1,7 +1,13 @@
+import Decimal from 'decimal.js';
+
 export interface Account {
-	id: string; //uuid
+	accountUUID?: string;
+	createdAt?: Date;
 	firstName: string;
 	lastName: string;
 	document: string;
-	createdAt: Date;
+	balance: Decimal;
+	password: string;
 }
+
+export type PublicAccount = Omit<Account, 'password' | 'createdAt'>
