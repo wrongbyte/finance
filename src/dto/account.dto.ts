@@ -10,4 +10,4 @@ export interface Account {
 	password: string;
 }
 
-export type PublicAccount = Omit<Account, 'password' | 'createdAt'>
+export type PublicAccount = Omit<Account, 'password' | 'createdAt'>;

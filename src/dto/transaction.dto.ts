@@ -1,4 +1,4 @@
-import { Account } from "./account";
+import { Account } from './account.dto';
 
 // TODO: use Readonly<T> when dealing with this type
 export interface Transaction {

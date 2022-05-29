@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import Decimal from 'decimal.js';
-import { createAccount } from '../services/account.service';
+import { AppError } from '../error';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { createAccount, findAccountByDocument } from '../services/account.service';
 import * as yup from 'yup';
 import { v4 as uuid } from 'uuid';
 
@@ -21,21 +22,20 @@ const accountSchema = yup
 
 export const registerAccount = async (payload: unknown): Promise<Response | void> => {
 	const accountPayload = await accountSchema.validate(payload);
-	try {
-		await createAccount({
-			...accountPayload,
-			accountUUID: uuid()
-		})
-	} catch(error) {
-		console.log(error);
+	const existingAccount = await findAccountByDocument({ document: accountPayload.document });
+	if (existingAccount) {
+		throw new AppError("There's already an user with this document", StatusCodes.BAD_REQUEST);
 	}
-	
+	await createAccount({
+		...accountPayload,
+		accountUUID: uuid(),
+	});
 };
 
-export const authenticateAccount = async (request: Request, response: Response) => {
+export const authenticateAccount = async (request, response) => {
 	return response.status(200).json({ message: 'authenticate account' });
 };
 
-export const balanceAccount = async (request: Request, response: Response) => {
+export const balanceAccount = async (request, response) => {
 	return response.status(200).json({ message: 'authenticate account' });
 };

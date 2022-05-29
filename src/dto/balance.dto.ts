@@ -1,4 +1,4 @@
-import { Account } from './account';
+import { Account } from './account.dto';
 
 export interface Balance {
 	userInfo: Omit<Account, 'id' | 'document' | 'createdAt'>;

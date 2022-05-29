@@ -1,9 +1,9 @@
 import express from 'express';
-import { Request, Response } from 'express';
 import { authMiddleware } from './middlewares/authMiddleware';
 import morganMiddleware from './middlewares/morganMiddleware';
 import accountRouter from './routers/accountRouter';
 import transactionRouter from './routers/transactionRouter';
+import { errorMiddleware } from './middlewares/errorMiddleware';
 
 export default () => {
 	const app = express();
@@ -12,8 +12,6 @@ export default () => {
 	app.use('/account', accountRouter);
 	app.use(authMiddleware);
 	app.use('/transaction', transactionRouter);
-	// app.use((request: Request, res: Response, next) => {
-	// 	return res.status(404)
-	// })
+	app.use(errorMiddleware);
 	return app;
 };
