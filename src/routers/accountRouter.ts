@@ -5,7 +5,7 @@ import {
 	authenticateAccount,
 	balanceAccount,
 } from '../controllers/account.controller';
-import { authMiddleware } from '../middlewares/authMiddleware';
+import { authMiddleware, loginMiddleware } from '../middlewares/authMiddleware';
 
 const accountRouter = express.Router();
 accountRouter.post('/create', async (request, response, next) => {
@@ -18,6 +18,7 @@ accountRouter.post('/create', async (request, response, next) => {
 		)
 		.catch(next);
 });
+accountRouter.post('/login', loginMiddleware)
 accountRouter.get('/auth', authenticateAccount);
 accountRouter.use(authMiddleware);
 accountRouter.get('/balance', balanceAccount);

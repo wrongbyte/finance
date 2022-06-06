@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import { AppError } from '../error';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { createAccount, findAccountByDocument } from '../services/account.service';
@@ -20,7 +19,7 @@ const accountSchema = yup
 	.noUnknown()
 	.required();
 
-export const registerAccount = async (payload: unknown): Promise<Response | void> => {
+export const registerAccount = async (payload: unknown) => {
 	const accountPayload = await accountSchema.validate(payload);
 	const existingAccount = await findAccountByDocument({ document: accountPayload.document });
 	if (existingAccount) {
