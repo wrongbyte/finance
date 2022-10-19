@@ -1,11 +1,12 @@
 import app from './server';
 import Logger from './config/winston';
 import { AppDataSource } from './config/data-source';
+const { PORT } = process.env
 
-const server = app();
+const server : any = app();
 
 AppDataSource.initialize().then(
-	server.listen(process.env.PORT, () => {
-		Logger.debug('Server running.');
+	server.listen(PORT, () => {
+		Logger.debug(`Server running on port ${PORT}`);
 	}),
 );

@@ -36,7 +36,6 @@ export const refreshTokenController = async (request, response, next) => {
             throw new AppError(errorMessage, StatusCodes.FORBIDDEN);
         }
 
-        // Checks if token is legit
         const decoded = verifyJWT<{ sub: string }>(refresh_token, 'REFRESHTOKEN_PUBLIC_KEY')
 
         if (!decoded) {

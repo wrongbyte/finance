@@ -1,4 +1,3 @@
-// https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/errorhandling/useonlythebuiltinerror.md
 export class AppError extends Error {
 	public readonly reason: string;
 	public readonly httpCode: number;
