@@ -2,7 +2,7 @@ import express from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { authenticateAccount, registerAccount } from '../controllers/accountController';
 import { refreshTokenController } from '../controllers/authController';
-import { authMiddleware, loginMiddleware } from '../middlewares/authMiddleware';
+import { authMiddleware } from '../middlewares/authMiddleware';
 import { validateCreateAccount, validateLoginPayload } from '../validations/account-validation';
 import { accessTokenCookieOptions } from '../controllers/authController';
 
@@ -24,25 +24,19 @@ accountRouter.post('/', async (request, response, next) => {
 accountRouter.post('/login', async (request, response, next) => {
 	try {
 		const { document, password } = await validateLoginPayload(request.body);
-        
-        const { access_token, refresh_token } = await authenticateAccount(document, password)
 
-		response.cookie('access_token', access_token, accessTokenCookieOptions)
+		const { access_token, refresh_token } = await authenticateAccount(document, password);
+		response.cookie('access_token', access_token, accessTokenCookieOptions);
 
-		response.cookie('refresh_token', refresh_token, accessTokenCookieOptions)
+		response.cookie('refresh_token', refresh_token, accessTokenCookieOptions);
 
-		response.send({
-			status: StatusCodes.OK,
-			message: ReasonPhrases.OK,
-		});
+		response.send({ status: StatusCodes.OK, message: ReasonPhrases.OK });
 	} catch (error) {
 		next(error);
 	}
 });
 
-accountRouter.get('/', async (request, response, next) => {
-	
-});
+accountRouter.get('/', async (request, response, next) => {});
 accountRouter.get('/refresh', refreshTokenController);
 accountRouter.use(authMiddleware);
 
