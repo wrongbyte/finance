@@ -4,7 +4,6 @@ import redisClient from '../config/redis';
 import { signJWT } from '../utils/jwt';
 
 const accountRepository = AppDataSource.getRepository(Account);
-const THIRTY_MINUTES = 30 * 60;
 
 export const createAccount = async (payload: Omit<Account, 'hashPassword'>) => {
 	return accountRepository.save(accountRepository.create(payload));
@@ -26,7 +25,7 @@ export const findAccountByDocumentAndPassword = async (
 };
 
 export const signTokens = async (account: Account) => {
-	redisClient.set(account.accountUUID, JSON.stringify(account), 'EX', THIRTY_MINUTES);
+	// redisClient.set(account.accountUUID, JSON.stringify(account), 'EX', THIRTY_MINUTES);
 
 	const access_token = signJWT({ sub: account.accountUUID }, 'ACCESSTOKEN_PRIVATE_KEY', {
 		expiresIn: `${parseInt(process.env.ACCESS_TOKEN_TIMEOUT)}m`,

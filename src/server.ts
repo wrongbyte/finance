@@ -12,7 +12,7 @@ export default () => {
 	app.use(cookieParser())
 	app.use(express.json());
 	app.use('/account', accountRouter);
-	app.use(authMiddleware);
+	app.use('/auth', authMiddleware);
 	app.use('/transaction', transactionRouter);
 	app.use(errorMiddleware);
 	return app;
