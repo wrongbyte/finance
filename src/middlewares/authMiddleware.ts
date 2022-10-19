@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { Account } from '../entities/Account';
 import { AppError } from '../error';
-import { findAccountByDocument, signTokens } from '../services/account.service';
+import { findAccountByDocument, signTokens } from '../services/accountService';
 import {
 	accessTokenCookieOptions,
 	refreshTokenCookieOptions,
-} from '../controllers/auth.controller';
+} from '../controllers/authController';
 
 export const authMiddleware = async (
 	request: Request,

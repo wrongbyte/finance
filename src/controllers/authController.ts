@@ -2,7 +2,7 @@ import { CookieOptions } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import redis from '../config/redis';
 import { AppError } from '../error';
-import { findAccountByDocument } from '../services/account.service';
+import { findAccountByDocument } from '../services/accountService';
 import { signJWT, verifyJWT } from '../utils/jwt';
 const cookieOptions : CookieOptions = {
     httpOnly: true,

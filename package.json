@@ -23,6 +23,7 @@
    "homepage": "https://github.com/wrongbyte/finance#readme",
    "devDependencies": {
       "@types/bcryptjs": "^2.4.2",
+      "@types/cookie-parser": "^1.4.3",
       "@types/jsonwebtoken": "^8.5.8",
       "@types/node": "^16.11.10",
       "@typescript-eslint/eslint-plugin": "^5.23.0",

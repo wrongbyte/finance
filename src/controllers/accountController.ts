@@ -1,6 +1,6 @@
 import { AppError } from '../error';
-import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { createAccount, findAccountByDocument } from '../services/account.service';
+import { StatusCodes } from 'http-status-codes';
+import { createAccount, findAccountByDocument } from '../services/accountService';
 import * as yup from 'yup';
 import { v4 as uuid } from 'uuid';
 
@@ -22,6 +22,7 @@ const accountSchema = yup
 export const registerAccount = async (payload: unknown) => {
 	const accountPayload = await accountSchema.validate(payload);
 	const existingAccount = await findAccountByDocument({ document: accountPayload.document });
+	
 	if (existingAccount) {
 		throw new AppError("There's already an user with this document", StatusCodes.BAD_REQUEST);
 	}

@@ -2,9 +2,9 @@ import express from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import {
 	registerAccount,
-	authenticateAccount,
 	balanceAccount,
-} from '../controllers/account.controller';
+} from '../controllers/accountController';
+import { refreshTokenController } from '../controllers/authController';
 import { authMiddleware, loginMiddleware } from '../middlewares/authMiddleware';
 
 const accountRouter = express.Router();
@@ -19,7 +19,7 @@ accountRouter.post('/create', async (request, response, next) => {
 		.catch(next);
 });
 accountRouter.post('/login', loginMiddleware)
-accountRouter.get('/auth', authenticateAccount);
+accountRouter.get('/refresh', refreshTokenController);
 accountRouter.use(authMiddleware);
 accountRouter.get('/balance', balanceAccount);
 
