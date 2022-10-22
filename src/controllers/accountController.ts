@@ -12,7 +12,7 @@ export const registerAccount = async (payload: Account) => {
 		throw new AppError("There's already an user with this document", StatusCodes.BAD_REQUEST);
 	}
 
-	await createAccount({
+	return await createAccount({
 		...payload,
 		accountUUID: uuid(),
 	});
@@ -20,10 +20,12 @@ export const registerAccount = async (payload: Account) => {
 
 export const authenticateAccount = async (document, password) => {
 	const account = await findAccountByDocument({ document });
-	
+
 	if (!account || !(await Account.comparePasswords(password, account.password))) {
 		throw new AppError('Invalid document or password', StatusCodes.BAD_REQUEST);
 	}
 
 	return await signTokens(account);
 };
+
+export const getBalanceOfAccount = async () => {};

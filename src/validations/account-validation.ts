@@ -4,7 +4,7 @@ export async function validateCreateAccount(payload) {
 	const schema = yup.object({
 		document: yup
 			.string()
-			.matches(/^[0-9]{11}$/)
+			.matches(/^[0-9]{11}$/, 'Invalid value for document')
 			.required(),
 		firstName: yup.string().required().min(2).max(32),
 		lastName: yup.string().required().min(2).max(32),
@@ -12,17 +12,17 @@ export async function validateCreateAccount(payload) {
 		password: yup.string().required().min(8).max(32),
 	});
 
-    return await schema.validate(payload)
+	return await schema.validate(payload);
 }
 
 export async function validateLoginPayload(payload) {
 	const schema = yup.object({
 		document: yup
 			.string()
-			.matches(/^[0-9]{11}$/)
+			.matches(/^[0-9]{11}$/, 'Invalid value for document')
 			.required(),
-		password: yup.string().required().min(8).max(32)
+		password: yup.string().required().min(8).max(32),
 	});
 
-    return await schema.validate(payload)
+	return await schema.validate(payload);
 }

@@ -9,10 +9,10 @@ import cookieParser from 'cookie-parser';
 export default () => {
 	const app = express();
 	app.use(morganMiddleware);
-	app.use(cookieParser())
+	app.use(cookieParser());
 	app.use(express.json());
 	app.use('/account', accountRouter);
-	app.use('/auth', authMiddleware);
+	app.use(authMiddleware);
 	app.use('/transaction', transactionRouter);
 	app.use(errorMiddleware);
 	return app;

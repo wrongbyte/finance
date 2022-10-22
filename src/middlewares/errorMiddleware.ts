@@ -17,6 +17,6 @@ export const errorMiddleware = async (error, request, response, next) => {
 
 	return response.status(status).json({
 		status: status,
-		message: message,
+		data: message,
 	});
 };

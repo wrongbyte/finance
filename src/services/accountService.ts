@@ -6,7 +6,9 @@ import { signJWT } from '../utils/jwt';
 const accountRepository = AppDataSource.getRepository(Account);
 
 export const createAccount = async (payload: Omit<Account, 'hashPassword'>) => {
-	return accountRepository.save(accountRepository.create(payload));
+	const newAccount = await accountRepository.save(accountRepository.create(payload));
+	delete newAccount.password;
+	return newAccount;
 };
 
 export const findAccountByDocument = async ({
