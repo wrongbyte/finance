@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { verifyJWT } from '../utils/jwt';
 import { AppError } from '../error';
+import redisClient from '../config/redis';
+import { findAccountByUUID } from '../services/accountService';
 
 export const authMiddleware = async (request: Request, response: Response, next) => {
 	try {
@@ -21,6 +23,20 @@ export const authMiddleware = async (request: Request, response: Response, next)
 		if (!decoded) {
 			throw new AppError('Invalid token', StatusCodes.FORBIDDEN);
 		}
+
+		const session = await redisClient.get(decoded.sub);
+
+		if (!session) {
+			throw new AppError('Invalid token or expired session', StatusCodes.FORBIDDEN);
+		}
+
+		const user = await findAccountByUUID(JSON.parse(session).accountUUID);
+
+		if (!user) {
+			throw new AppError('Invalid token or expired session', StatusCodes.FORBIDDEN);
+		}
+
+		response.locals.user = user;
 
 		next();
 	} catch (error) {

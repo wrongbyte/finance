@@ -19,15 +19,15 @@ export const findAccountByDocument = async ({
 	return await accountRepository.findOneBy({ document });
 };
 
-export const findAccountByDocumentAndPassword = async (
-	{ document }: { document: string },
-	{ password }: { password: string },
-): Promise<Account | undefined> => {
-	return await accountRepository.findOneBy({ document });
+export const findAccountByUUID = async (uuid: string) => {
+	const account = await accountRepository.findOneBy({ accountUUID: uuid });
+	delete account.password;
+	delete account.id;
+	return account;
 };
 
 export const signTokens = async (account: Account) => {
-	// redisClient.set(account.accountUUID, JSON.stringify(account), 'EX', THIRTY_MINUTES);
+	redisClient.set(account.accountUUID, JSON.stringify(account), 'EX', 30 * 60);
 
 	const access_token = signJWT({ sub: account.accountUUID }, 'ACCESSTOKEN_PRIVATE_KEY', {
 		expiresIn: `${parseInt(process.env.ACCESS_TOKEN_TIMEOUT)}m`,
