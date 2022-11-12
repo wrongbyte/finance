@@ -8,7 +8,7 @@ export async function validateCreateAccount(payload) {
 			.required(),
 		firstName: yup.string().required().min(2).max(32),
 		lastName: yup.string().required().min(2).max(32),
-		balance: yup.string().required(),
+		balance: yup.number().required(),
 		password: yup.string().required().min(8).max(32),
 	});
 
