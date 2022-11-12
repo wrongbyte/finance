@@ -6,8 +6,8 @@ export async function validateLoginPayload(payload) {
 			.string()
 			.matches(/^[0-9]{11}$/)
 			.required(),
-		password: yup.string().required().min(8).max(32)
+		password: yup.string().required().min(8).max(32),
 	});
 
-    return await schema.validate(payload)
+	return await schema.validate(payload);
 }

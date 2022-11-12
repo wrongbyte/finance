@@ -2,7 +2,7 @@ import express from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { authenticateAccount, registerAccount } from '../controllers/accountController';
 import { authMiddleware } from '../middlewares/authMiddleware';
-import { validateCreateAccount, validateLoginPayload } from '../validations/account-validation';
+import { validateCreateAccount, validateLoginPayload } from '../validations/accountValidation';
 import { accessTokenCookieOptions } from '../controllers/authController';
 
 const accountRouter = express.Router();

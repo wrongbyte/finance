@@ -6,7 +6,13 @@ import {
 } from '../controllers/transactionController';
 
 const transactionRouter = express.Router();
-transactionRouter.post('/register', registerTransaction);
+transactionRouter.post('/register', async (request, response, next) => {
+	try {
+		const accountUUID = response.locals.user.accountUUID;
+	} catch (error) {
+		next(error);
+	}
+});
 transactionRouter.post('/chargeback', getChargeback);
 transactionRouter.get('/history', getHistory);
 

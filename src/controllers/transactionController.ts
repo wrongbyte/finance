@@ -3,9 +3,6 @@ import { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } from 'http
 import { AppError } from '../error';
 
 export const registerTransaction = async (request: Request, response: Response) => {
-	// if (Error) {
-	// 	throw new AppError(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR), StatusCodes.INTERNAL_SERVER_ERROR)
-	// }
 	return response.status(200).json({ message: 'register transaction' });
 };
 

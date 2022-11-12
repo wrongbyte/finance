@@ -27,5 +27,3 @@ export const authenticateAccount = async (document, password) => {
 
 	return await signTokens(account);
 };
-
-export const getBalanceOfAccount = async () => {};
