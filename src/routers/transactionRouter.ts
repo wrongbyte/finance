@@ -1,9 +1,5 @@
 import express from 'express';
-import {
-	registerTransaction,
-	getChargeback,
-	getHistory,
-} from '../controllers/transactionController';
+import { registerTransaction } from '../controllers/transactionController';
 import { validateCreateTransaction } from '../validations/transactionValidation';
 
 const transactionRouter = express.Router();
@@ -21,7 +17,7 @@ transactionRouter.post('/', async (request, response, next) => {
 		next(error);
 	}
 });
-transactionRouter.post('/chargeback', getChargeback);
-transactionRouter.get('/history', getHistory);
+// transactionRouter.post('/chargeback', getChargeback);
+// transactionRouter.get('/history', getHistory);
 
 export default transactionRouter;

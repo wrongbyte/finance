@@ -8,7 +8,15 @@ export async function validateCreateAccount(payload) {
 			.required(),
 		firstName: yup.string().required().min(2).max(32),
 		lastName: yup.string().required().min(2).max(32),
-		balance: yup.number().required(),
+		balance: yup
+			.number()
+			.positive()
+			.test(
+				'is-decimal',
+				'Balance should be a decimal number',
+				(value) => String(value).split('.')[1]?.length == 2,
+			)
+			.required(),
 		password: yup.string().required().min(8).max(32),
 	});
 

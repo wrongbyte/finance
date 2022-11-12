@@ -1,11 +1,4 @@
-import {
-	Entity,
-	PrimaryGeneratedColumn,
-	CreateDateColumn,
-	Column,
-	Index,
-	BeforeInsert,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, Index } from 'typeorm';
 
 @Entity()
 export class Transaction {
@@ -19,7 +12,7 @@ export class Transaction {
 	destinationAccountUUID: string;
 
 	@Index(['sourceAccountUUID', 'destinationAccountUUID'])
-	@Column({ type: 'decimal', precision: 6, scale: 2, nullable: false })
+	@Column({ type: 'integer' })
 	quantity: number;
 
 	@CreateDateColumn()

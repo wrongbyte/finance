@@ -14,13 +14,14 @@ export class Account {
 	id: number;
 
 	@Column({ length: 36, nullable: false, unique: true })
+	@Index('USER_UUID')
 	accountUUID: string;
 
 	@Column({ length: 11, nullable: false, unique: true })
 	@Index('USER_DOCUMENT')
 	document: string;
 
-	@Column({ type: 'decimal', precision: 6, scale: 2, nullable: false })
+	@Column({ type: 'integer' })
 	balance: number;
 
 	@Column({ length: 32, nullable: false })

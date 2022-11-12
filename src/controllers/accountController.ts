@@ -1,6 +1,11 @@
 import { AppError } from '../error';
 import { StatusCodes } from 'http-status-codes';
-import { createAccount, findAccountByDocument, signTokens } from '../services/accountService';
+import {
+	createAccount,
+	findAccountByDocument,
+	findAccountByUUID,
+	signTokens,
+} from '../services/accountService';
 import { v4 as uuid } from 'uuid';
 import { Account } from '../entities/Account';
 
@@ -26,4 +31,18 @@ export const authenticateAccount = async (document, password) => {
 	}
 
 	return await signTokens(account);
+};
+
+export const updateAccountBalance = async (
+	sourceAccountUUID: string,
+	destinationAccount: Account,
+	transactionAmount: number,
+) => {
+	const accountSource = await findAccountByUUID(sourceAccountUUID);
+
+	if (accountSource.balance < transactionAmount) {
+		throw new AppError('Insufficient balance', StatusCodes.BAD_REQUEST);
+	}
+
+	// return await
 };

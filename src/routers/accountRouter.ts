@@ -4,11 +4,13 @@ import { authenticateAccount, registerAccount } from '../controllers/accountCont
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { validateCreateAccount, validateLoginPayload } from '../validations/accountValidation';
 import { accessTokenCookieOptions } from '../controllers/authController';
+import { formatterBRL } from '../utils/money';
 
 const accountRouter = express.Router();
 accountRouter.post('/', async (request, response, next) => {
 	try {
 		const accountPayload = await validateCreateAccount(request.body);
+		accountPayload.balance = accountPayload.balance * 100;
 		const account = await registerAccount(accountPayload as any);
 
 		response.send({
@@ -36,6 +38,9 @@ accountRouter.post('/login', async (request, response, next) => {
 
 accountRouter.get('/', authMiddleware, async (_, response, next) => {
 	try {
+		const accountData = response.locals.user;
+		accountData.balance = formatterBRL.format(accountData.balance / 100);
+
 		response.send({ status: StatusCodes.OK, data: response.locals.user });
 	} catch (error) {
 		next(error);

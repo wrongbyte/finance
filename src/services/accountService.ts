@@ -2,11 +2,23 @@ import { Account } from '../entities/Account';
 import { AppDataSource } from '../config/data-source';
 import redisClient from '../config/redis';
 import { signJWT } from '../utils/jwt';
+import { formatterBRL } from '../utils/money';
 
 const accountRepository = AppDataSource.getRepository(Account);
 
-export const createAccount = async (payload: Omit<Account, 'hashPassword'>) => {
-	const newAccount = await accountRepository.save(accountRepository.create(payload));
+interface FormattedAccount extends Omit<Account, 'balance'> {
+	balance: number | string;
+}
+
+export const createAccount = async (
+	payload: Omit<Account, 'hashPassword'>,
+): Promise<FormattedAccount> => {
+	const newAccount = (await accountRepository.save(
+		accountRepository.create(payload),
+	)) as FormattedAccount;
+
+	newAccount.balance = formatterBRL.format((newAccount.balance as number) / 100);
+
 	delete newAccount.password;
 	return newAccount;
 };
@@ -39,3 +51,7 @@ export const signTokens = async (account: Account) => {
 
 	return { access_token, refresh_token };
 };
+
+// export const updateAccountInformation = async (uuidUser: string, amount: Decimal) => {
+// 	const sourceAccount = await findAccountByUUID(uuidUser)
+// }
