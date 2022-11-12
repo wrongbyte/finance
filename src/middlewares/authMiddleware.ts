@@ -5,6 +5,8 @@ import { AppError } from '../error';
 import redisClient from '../config/redis';
 import { findAccountByUUID } from '../services/accountService';
 
+const invalidTokenMessage = 'Invalid token or expired session';
+
 export const authMiddleware = async (request: Request, response: Response, next) => {
 	try {
 		let access_token = null;
@@ -21,19 +23,19 @@ export const authMiddleware = async (request: Request, response: Response, next)
 		const decoded = verifyJWT<{ sub: string }>(access_token, 'ACCESSTOKEN_PUBLIC_KEY');
 
 		if (!decoded) {
-			throw new AppError('Invalid token', StatusCodes.FORBIDDEN);
+			throw new AppError(invalidTokenMessage, StatusCodes.FORBIDDEN);
 		}
 
 		const session = await redisClient.get(decoded.sub);
 
 		if (!session) {
-			throw new AppError('Invalid token or expired session', StatusCodes.FORBIDDEN);
+			throw new AppError(invalidTokenMessage, StatusCodes.FORBIDDEN);
 		}
 
 		const user = await findAccountByUUID(JSON.parse(session).accountUUID);
 
 		if (!user) {
-			throw new AppError('Invalid token or expired session', StatusCodes.FORBIDDEN);
+			throw new AppError(invalidTokenMessage, StatusCodes.FORBIDDEN);
 		}
 
 		response.locals.user = user;
