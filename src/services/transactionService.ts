@@ -28,7 +28,8 @@ export const executeTransaction = async (sourceUUID, destinationUUID, amount) =>
 			{ balance: destinationAccountUpdatedBalance },
 		);
 
-		transactionLog = await transactionRepository.save(
+		transactionLog = await transactionalEntityManager.save(
+			Transaction,
 			transactionRepository.create({
 				transactionUUID: uuid(),
 				sourceAccountUUID: sourceUUID,
