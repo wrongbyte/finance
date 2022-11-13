@@ -2,6 +2,7 @@ import { AppError } from '../error';
 import { StatusCodes } from 'http-status-codes';
 import {
 	createAccount,
+	executeTransaction,
 	findAccountByDocument,
 	findAccountByUUID,
 	signTokens,
@@ -10,6 +11,7 @@ import {
 import { v4 as uuid } from 'uuid';
 import { Account } from '../entities/Account';
 import { createTransaction } from '../services/transactionService';
+import { AppDataSource } from '../config/data-source';
 
 export const registerAccount = async (payload: Account) => {
 	const { document } = payload;
@@ -56,11 +58,11 @@ export const processTransaction = async (
 
 	const destinationAccountUUID = accountDestination.accountUUID;
 
-	const sourceAccountUpdatedBalance = accountSource.balance - transactionAmount;
-	await updateAccountBalance(sourceAccountUUID, sourceAccountUpdatedBalance);
-
-	const destinationAccountUpdatedBalance = accountDestination.balance + transactionAmount;
-	await updateAccountBalance(destinationAccountUUID, destinationAccountUpdatedBalance);
+	await executeTransaction(
+		accountSource.accountUUID,
+		accountDestination.accountUUID,
+		transactionAmount,
+	);
 
 	const transactionLog = await createTransaction({
 		sourceAccountUUID,

@@ -2,7 +2,6 @@ import { StatusCodes } from 'http-status-codes';
 import { AppError } from '../error';
 import { findAccountByDocument } from '../services/accountService';
 import { processTransaction } from './accountController';
-import { v4 as uuid } from 'uuid';
 import { formatterBRL } from '../utils/money';
 
 export const registerTransaction = async ({

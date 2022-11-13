@@ -42,6 +42,27 @@ export const updateAccountBalance = async (accountUUID, updatedBalance) => {
 	return await accountRepository.update({ accountUUID }, { balance: updatedBalance });
 };
 
+export const executeTransaction = async (sourceUUID, destinationUUID, amount) => {
+	const accountSource = await findAccountByUUID(sourceUUID);
+	const accountDestination = await findAccountByUUID(destinationUUID);
+
+	await AppDataSource.transaction(async (transactionalEntityManager) => {
+		const sourceAccountUpdatedBalance = accountSource.balance - amount;
+		await transactionalEntityManager.update(
+			Account,
+			{ accountUUID: sourceUUID },
+			{ balance: sourceAccountUpdatedBalance },
+		);
+
+		const destinationAccountUpdatedBalance = accountDestination.balance + amount;
+		await transactionalEntityManager.update(
+			Account,
+			{ accountUUID: destinationUUID },
+			{ balance: destinationAccountUpdatedBalance },
+		);
+	});
+};
+
 export const signTokens = async (account: Account) => {
 	redisClient.set(account.accountUUID, JSON.stringify(account), 'EX', 30 * 60);
 
