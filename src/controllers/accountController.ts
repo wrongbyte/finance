@@ -1,14 +1,8 @@
 import { AppError } from '../error';
 import { StatusCodes } from 'http-status-codes';
-import {
-	createAccount,
-	findAccountByDocument,
-	findAccountByUUID,
-	signTokens,
-} from '../services/accountService';
+import { createAccount, findAccountByDocument, signTokens } from '../services/accountService';
 import { v4 as uuid } from 'uuid';
 import { Account } from '../entities/Account';
-import { executeTransaction } from '../services/transactionService';
 
 export const registerAccount = async (payload: Account) => {
 	const { document } = payload;
@@ -32,32 +26,4 @@ export const authenticateAccount = async (document, password) => {
 	}
 
 	return await signTokens(account);
-};
-
-export const processTransaction = async (
-	sourceAccountUUID: string,
-	destinationAccountDocument: string,
-	transactionAmount: number,
-) => {
-	const accountSource = await findAccountByUUID(sourceAccountUUID);
-
-	if (accountSource.balance < transactionAmount) {
-		throw new AppError('Insufficient balance', StatusCodes.BAD_REQUEST);
-	}
-
-	const accountDestination = await findAccountByDocument({
-		document: destinationAccountDocument,
-	});
-
-	if (accountDestination.document === accountSource.document) {
-		throw new AppError('Invalid destination account', StatusCodes.BAD_REQUEST);
-	}
-
-	const transactionLog = await executeTransaction(
-		accountSource.accountUUID,
-		accountDestination.accountUUID,
-		transactionAmount,
-	);
-
-	return transactionLog;
 };

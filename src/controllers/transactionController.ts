@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { AppError } from '../error';
-import { findAccountByDocument } from '../services/accountService';
-import { processTransaction } from './accountController';
+import { findAccountByDocument, findAccountByUUID } from '../services/accountService';
+import { executeTransaction } from '../services/transactionService';
 
 export const registerTransaction = async ({
 	sourceAccountUUID,
@@ -12,6 +12,12 @@ export const registerTransaction = async ({
 	destinationAccountDocument: string;
 	amount: number;
 }) => {
+	const sourceAccount = await findAccountByUUID(sourceAccountUUID);
+
+	if (sourceAccount.balance < amount) {
+		throw new AppError('Insufficient balance', StatusCodes.BAD_REQUEST);
+	}
+
 	const destinationAccount = await findAccountByDocument({
 		document: destinationAccountDocument,
 	});
@@ -20,7 +26,11 @@ export const registerTransaction = async ({
 		throw new AppError('No account found with this document', StatusCodes.BAD_REQUEST);
 	}
 
-	return await processTransaction(sourceAccountUUID, destinationAccountDocument, amount);
+	if (destinationAccount.document === sourceAccount.document) {
+		throw new AppError('Invalid destination account', StatusCodes.BAD_REQUEST);
+	}
+
+	return await executeTransaction(sourceAccountUUID, destinationAccount.accountUUID, amount);
 };
 
 // export const getChargeback = async (request: Request, response: Response) => {
