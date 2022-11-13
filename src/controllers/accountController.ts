@@ -2,16 +2,13 @@ import { AppError } from '../error';
 import { StatusCodes } from 'http-status-codes';
 import {
 	createAccount,
-	executeTransaction,
 	findAccountByDocument,
 	findAccountByUUID,
 	signTokens,
-	updateAccountBalance,
 } from '../services/accountService';
 import { v4 as uuid } from 'uuid';
 import { Account } from '../entities/Account';
-import { createTransaction } from '../services/transactionService';
-import { AppDataSource } from '../config/data-source';
+import { executeTransaction } from '../services/transactionService';
 
 export const registerAccount = async (payload: Account) => {
 	const { document } = payload;
@@ -56,19 +53,11 @@ export const processTransaction = async (
 		throw new AppError('Invalid destination account', StatusCodes.BAD_REQUEST);
 	}
 
-	const destinationAccountUUID = accountDestination.accountUUID;
-
-	await executeTransaction(
+	const transactionLog = await executeTransaction(
 		accountSource.accountUUID,
 		accountDestination.accountUUID,
 		transactionAmount,
 	);
-
-	const transactionLog = await createTransaction({
-		sourceAccountUUID,
-		destinationAccountUUID,
-		amount: transactionAmount,
-	});
 
 	return transactionLog;
 };

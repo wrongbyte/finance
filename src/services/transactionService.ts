@@ -1,25 +1,46 @@
 import { AppDataSource } from '../config/data-source';
-import { TransactionPayload } from '../types/Transaction';
 import { Transaction } from '../entities/Transaction';
 import { formatterBRL } from '../utils/money';
 import { v4 as uuid } from 'uuid';
+import { Account } from '../entities/Account';
+import { findAccountByUUID } from './accountService';
 
 const transactionRepository = AppDataSource.getRepository(Transaction);
 
-interface FormattedTransaction extends Omit<Transaction, 'amount'> {
-	amount: number | string;
-}
+export const executeTransaction = async (sourceUUID, destinationUUID, amount) => {
+	const accountSource = await findAccountByUUID(sourceUUID);
+	const accountDestination = await findAccountByUUID(destinationUUID);
 
-export const createTransaction = async (
-	payload: TransactionPayload,
-): Promise<FormattedTransaction> => {
-	const transactionLog = (await transactionRepository.save(
-		transactionRepository.create({ transactionUUID: uuid(), ...payload } as Transaction),
-	)) as FormattedTransaction;
+	let transactionLog = null;
 
-	transactionLog.amount = formatterBRL.format((transactionLog.amount as number) / 100);
+	await AppDataSource.transaction(async (transactionalEntityManager) => {
+		const sourceAccountUpdatedBalance = accountSource.balance - amount;
+		await transactionalEntityManager.update(
+			Account,
+			{ accountUUID: sourceUUID },
+			{ balance: sourceAccountUpdatedBalance },
+		);
 
-	delete transactionLog.id;
+		const destinationAccountUpdatedBalance = accountDestination.balance + amount;
+		await transactionalEntityManager.update(
+			Account,
+			{ accountUUID: destinationUUID },
+			{ balance: destinationAccountUpdatedBalance },
+		);
+
+		transactionLog = await transactionRepository.save(
+			transactionRepository.create({
+				transactionUUID: uuid(),
+				sourceAccountUUID: sourceUUID,
+				destinationAccountUUID: destinationUUID,
+				amount,
+			}),
+		);
+
+		transactionLog.amount = formatterBRL.format(transactionLog.amount / 100);
+
+		delete transactionLog.id;
+	});
 
 	return transactionLog;
 };
