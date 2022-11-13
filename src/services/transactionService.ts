@@ -40,6 +40,7 @@ export const executeTransaction = async (sourceUUID, destinationUUID, amount) =>
 		);
 
 		transactionLog.amount = formatterBRL.format(transactionLog.amount / 100);
+		transactionLog.createdAt = transactionLog.createdAt.toLocaleString('pt-BR');
 
 		delete transactionLog.id;
 	});
@@ -56,6 +57,7 @@ export const getTransactionLogsByRangeDate = async (startDate, endDate, sourceAc
 	});
 	transactionLogs.map((log) => {
 		delete log.id;
+		log.createdAt = new Date(log.createdAt).toLocaleString('pt-BR');
 		log.amount = formatterBRL.format(log.amount / 100) as any;
 	});
 
