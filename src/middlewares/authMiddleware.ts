@@ -35,7 +35,7 @@ export const authMiddleware = async (request: Request, response: Response, next)
 		const user = await findAccountByUUID(JSON.parse(session).accountUUID);
 
 		if (!user) {
-			throw new AppError(invalidTokenMessage, StatusCodes.FORBIDDEN);
+			throw new AppError("User doesn't exist", StatusCodes.FORBIDDEN);
 		}
 
 		response.locals.user = user;
