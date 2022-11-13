@@ -43,7 +43,7 @@ export const updateAccountBalance = async (accountUUID, updatedBalance) => {
 };
 
 export const signTokens = async (account: Account) => {
-	redisClient.set(account.accountUUID, JSON.stringify(account), 'EX', 30 * 60);
+	redisClient.set(account.accountUUID, JSON.stringify(account), 'EX', 3600000);
 
 	const access_token = signJWT({ sub: account.accountUUID }, 'ACCESSTOKEN_PRIVATE_KEY', {
 		expiresIn: `${parseInt(process.env.ACCESS_TOKEN_TIMEOUT)}m`,

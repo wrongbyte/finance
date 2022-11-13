@@ -1,2 +1,2 @@
 # finance
-Financial API
+Banking API
