@@ -9,7 +9,7 @@ export async function validateCreateTransaction(payload) {
 			.required(),
 		amount: yup
 			.number()
-			.positive()
+			.positive('Amount must be greater than zero')
 			.test(
 				'is-decimal',
 				'Amount should be a decimal number',
