@@ -5,6 +5,7 @@ import accountRouter from './routers/accountRouter';
 import transactionRouter from './routers/transactionRouter';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 import cookieParser from 'cookie-parser';
+import { refreshTokenController } from './controllers/authController';
 
 export default () => {
 	const app = express();
@@ -14,6 +15,7 @@ export default () => {
 	app.use('/account', accountRouter);
 	app.use(authMiddleware);
 	app.use('/transaction', transactionRouter);
+	app.use('/refresh', refreshTokenController);
 	app.use(errorMiddleware);
 	return app;
 };
