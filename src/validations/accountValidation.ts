@@ -14,7 +14,7 @@ export async function validateCreateAccount(payload) {
 			.test(
 				'is-decimal',
 				'Balance should be a decimal number',
-				(value) => String(value).split('.')[1]?.length == 2,
+				(value) => !(String(value).split('.')[1]?.length > 2),
 			)
 			.required(),
 		password: yup.string().required().min(8).max(32),

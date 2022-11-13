@@ -7,7 +7,15 @@ export async function validateCreateTransaction(payload) {
 			.string()
 			.matches(/^[0-9]{11}$/, 'Invalid value for document')
 			.required(),
-		amount: yup.number().positive().required(),
+		amount: yup
+			.number()
+			.positive()
+			.test(
+				'is-decimal',
+				'Amount should be a decimal number',
+				(value) => !(String(value).split('.')[1]?.length > 2),
+			)
+			.required(),
 	});
 
 	return await schema.validate(payload);

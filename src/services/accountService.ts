@@ -51,7 +51,3 @@ export const signTokens = async (account: Account) => {
 
 	return { access_token, refresh_token };
 };
-
-// export const updateAccountInformation = async (uuidUser: string, amount: Decimal) => {
-// 	const sourceAccount = await findAccountByUUID(uuidUser)
-// }

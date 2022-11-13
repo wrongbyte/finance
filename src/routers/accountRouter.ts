@@ -40,6 +40,7 @@ accountRouter.get('/', authMiddleware, async (_, response, next) => {
 	try {
 		const accountData = response.locals.user;
 		accountData.balance = formatterBRL.format(accountData.balance / 100);
+		delete accountData.createdAt;
 
 		response.send({ status: StatusCodes.OK, data: response.locals.user });
 	} catch (error) {

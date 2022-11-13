@@ -5,6 +5,10 @@ import { validateCreateTransaction } from '../validations/transactionValidation'
 const transactionRouter = express.Router();
 transactionRouter.post('/', async (request, response, next) => {
 	try {
+		console.log({
+			sourceAccountUUID: response.locals.user.accountUUID,
+			...request.body,
+		});
 		const { sourceAccountUUID, destinationAccountDocument, amount } =
 			await validateCreateTransaction({
 				sourceAccountUUID: response.locals.user.accountUUID,

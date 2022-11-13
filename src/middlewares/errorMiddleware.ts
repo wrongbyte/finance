@@ -1,5 +1,4 @@
 import { AppError } from '../error';
-import Logger from '../config/winston';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { ValidationError } from 'yup';
 
@@ -16,7 +15,6 @@ export const errorMiddleware = async (error, request, response, next) => {
 	}
 
 	if (process.env.NODE_ENV === 'dev') {
-		await Logger.error(error);
 		console.log(error);
 	}
 
