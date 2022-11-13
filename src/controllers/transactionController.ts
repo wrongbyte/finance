@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { AppError } from '../error';
 import { findAccountByDocument, findAccountByUUID } from '../services/accountService';
-import { executeTransaction } from '../services/transactionService';
+import { executeTransaction, getTransactionLogsByRangeDate } from '../services/transactionService';
 
 export const registerTransaction = async ({
 	sourceAccountUUID,
@@ -33,10 +33,10 @@ export const registerTransaction = async ({
 	return await executeTransaction(sourceAccountUUID, destinationAccount.accountUUID, amount);
 };
 
+export const getHistory = async (startDate, endDate, sourceAccountUUID) => {
+	return getTransactionLogsByRangeDate(startDate, endDate, sourceAccountUUID);
+};
+
 // export const getChargeback = async (request: Request, response: Response) => {
 // 	return response.status(200).json({ message: 'get chargeback' });
-// };
-
-// export const getHistory = async (request: Request, response: Response) => {
-// 	return response.status(200).json({ message: 'get history' });
 // };

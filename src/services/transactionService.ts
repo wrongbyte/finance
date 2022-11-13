@@ -4,6 +4,7 @@ import { formatterBRL } from '../utils/money';
 import { v4 as uuid } from 'uuid';
 import { Account } from '../entities/Account';
 import { findAccountByUUID } from './accountService';
+import { Between } from 'typeorm';
 
 const transactionRepository = AppDataSource.getRepository(Transaction);
 
@@ -44,4 +45,19 @@ export const executeTransaction = async (sourceUUID, destinationUUID, amount) =>
 	});
 
 	return transactionLog;
+};
+
+export const getTransactionLogsByRangeDate = async (startDate, endDate, sourceAccountUUID) => {
+	const transactionLogs = await transactionRepository.find({
+		where: {
+			sourceAccountUUID,
+			createdAt: Between(startDate, endDate),
+		},
+	});
+	transactionLogs.map((log) => {
+		delete log.id;
+		log.amount = formatterBRL.format(log.amount / 100) as any;
+	});
+
+	return transactionLogs;
 };

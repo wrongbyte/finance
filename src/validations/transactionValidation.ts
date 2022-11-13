@@ -20,3 +20,13 @@ export async function validateCreateTransaction(payload) {
 
 	return await schema.validate(payload);
 }
+
+export async function validateDatesHistory(payload) {
+	const schema = yup.object({
+		sourceAccountUUID: yup.string().uuid().required(),
+		startDate: yup.date().required(),
+		endDate: yup.date().required(),
+	});
+
+	return await schema.validate(payload);
+}

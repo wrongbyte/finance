@@ -1,7 +1,10 @@
 import express from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { registerTransaction } from '../controllers/transactionController';
-import { validateCreateTransaction } from '../validations/transactionValidation';
+import { getHistory, registerTransaction } from '../controllers/transactionController';
+import {
+	validateCreateTransaction,
+	validateDatesHistory,
+} from '../validations/transactionValidation';
 
 const transactionRouter = express.Router();
 transactionRouter.post('/', async (request, response, next) => {
@@ -28,7 +31,25 @@ transactionRouter.post('/', async (request, response, next) => {
 		next(error);
 	}
 });
+
+transactionRouter.get('/', async (request, response, next) => {
+	try {
+		const { startDate, endDate, sourceAccountUUID } = await validateDatesHistory({
+			sourceAccountUUID: response.locals.user.accountUUID,
+			...request.query,
+		});
+
+		const history = await getHistory(startDate, endDate, sourceAccountUUID);
+
+		response.send({
+			status: StatusCodes.OK,
+			data: history,
+		});
+	} catch (error) {
+		next(error);
+	}
+});
+
 // transactionRouter.post('/chargeback', getChargeback);
-// transactionRouter.get('/history', getHistory);
 
 export default transactionRouter;
