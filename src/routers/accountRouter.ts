@@ -10,7 +10,7 @@ const accountRouter = express.Router();
 accountRouter.post('/', async (request, response, next) => {
 	try {
 		const accountPayload = await validateCreateAccount(request.body);
-		accountPayload.balance = accountPayload.balance * 100;
+		accountPayload.balance *= 100;
 		const account = await registerAccount(accountPayload as any);
 
 		response.send({

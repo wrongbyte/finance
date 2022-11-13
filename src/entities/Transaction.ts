@@ -13,7 +13,11 @@ export class Transaction {
 
 	@Index(['sourceAccountUUID', 'destinationAccountUUID'])
 	@Column({ type: 'integer' })
-	quantity: number;
+	amount: number;
+
+	@Column({ length: 36, nullable: false, unique: true })
+	@Index('TRANSACTION_UUID')
+	transactionUUID: string;
 
 	@CreateDateColumn()
 	createdAt?: string;

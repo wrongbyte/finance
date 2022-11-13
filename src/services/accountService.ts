@@ -38,6 +38,10 @@ export const findAccountByUUID = async (uuid: string) => {
 	return account;
 };
 
+export const updateAccountBalance = async (accountUUID, updatedBalance) => {
+	return await accountRepository.update({ accountUUID }, { balance: updatedBalance });
+};
+
 export const signTokens = async (account: Account) => {
 	redisClient.set(account.accountUUID, JSON.stringify(account), 'EX', 30 * 60);
 

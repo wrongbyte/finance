@@ -1,13 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import { AppError } from '../error';
 import { findAccountByDocument } from '../services/accountService';
-import { updateAccountBalance } from './accountController';
-
-const formatterBRL = new Intl.NumberFormat('pt-BR', {
-	maximumSignificantDigits: 2,
-	style: 'currency',
-	currency: 'BRL',
-});
+import { processTransaction } from './accountController';
+import { v4 as uuid } from 'uuid';
+import { formatterBRL } from '../utils/money';
 
 export const registerTransaction = async ({
 	sourceAccountUUID,
@@ -26,7 +22,7 @@ export const registerTransaction = async ({
 		throw new AppError('No account found with this document', StatusCodes.BAD_REQUEST);
 	}
 
-	const transaction = await updateAccountBalance(sourceAccountUUID, destinationAccount, amount);
+	return await processTransaction(sourceAccountUUID, destinationAccountDocument, amount);
 };
 
 // export const getChargeback = async (request: Request, response: Response) => {

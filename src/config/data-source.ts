@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { Account } from '../entities/Account';
+import { Transaction } from '../entities/Transaction';
 const { PSQL_HOST, PSLQ_PORT, PSQL_USER, PSQL_PASSWORD, PSQL_DB } = process.env;
 
 export const AppDataSource = new DataSource({
@@ -12,7 +13,7 @@ export const AppDataSource = new DataSource({
 	database: PSQL_DB,
 	synchronize: true,
 	logging: false,
-	entities: [Account],
+	entities: [Account, Transaction],
 	migrations: [],
 	subscribers: [],
 });

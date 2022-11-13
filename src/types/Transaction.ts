@@ -1,6 +1,5 @@
-export interface Transaction {
-	id: string;
-	readonly sourceAccountUUID: string;
-	readonly destinationAccountUUID: string;
-	readonly createdAt: Date;
+export interface TransactionPayload {
+	sourceAccountUUID: string;
+	destinationAccountUUID: string;
+	amount: number | string;
 }

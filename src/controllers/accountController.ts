@@ -5,9 +5,11 @@ import {
 	findAccountByDocument,
 	findAccountByUUID,
 	signTokens,
+	updateAccountBalance,
 } from '../services/accountService';
 import { v4 as uuid } from 'uuid';
 import { Account } from '../entities/Account';
+import { createTransaction } from '../services/transactionService';
 
 export const registerAccount = async (payload: Account) => {
 	const { document } = payload;
@@ -33,9 +35,9 @@ export const authenticateAccount = async (document, password) => {
 	return await signTokens(account);
 };
 
-export const updateAccountBalance = async (
+export const processTransaction = async (
 	sourceAccountUUID: string,
-	destinationAccount: Account,
+	destinationAccountDocument: string,
 	transactionAmount: number,
 ) => {
 	const accountSource = await findAccountByUUID(sourceAccountUUID);
@@ -44,5 +46,27 @@ export const updateAccountBalance = async (
 		throw new AppError('Insufficient balance', StatusCodes.BAD_REQUEST);
 	}
 
-	// return await
+	const accountDestination = await findAccountByDocument({
+		document: destinationAccountDocument,
+	});
+
+	if (accountDestination.document === accountSource.document) {
+		throw new AppError('Invalid destination account', StatusCodes.BAD_REQUEST);
+	}
+
+	const destinationAccountUUID = accountDestination.accountUUID;
+
+	const sourceAccountUpdatedBalance = accountSource.balance - transactionAmount;
+	await updateAccountBalance(sourceAccountUUID, sourceAccountUpdatedBalance);
+
+	const destinationAccountUpdatedBalance = accountDestination.balance + transactionAmount;
+	await updateAccountBalance(destinationAccountUUID, destinationAccountUpdatedBalance);
+
+	const transactionLog = await createTransaction({
+		sourceAccountUUID,
+		destinationAccountUUID,
+		amount: transactionAmount,
+	});
+
+	return transactionLog;
 };
