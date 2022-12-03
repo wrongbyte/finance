@@ -24,13 +24,15 @@ export async function validateCreateTransaction(payload) {
 export async function validateDatesHistory(payload) {
 	const schema = yup.object({
 		sourceAccountUUID: yup.string().uuid().required(),
-		startDate: yup.date().required().max(new Date(), 'Invalid start date'),
+		startDate: yup.date().max(new Date(), 'Invalid start date'),
 		endDate: yup
 			.date()
-			.required()
 			.test('same-dates', 'Start and end date must be different', (value, ctx) => {
 				const { startDate } = ctx.parent;
-				return value.getTime() !== startDate.getTime();
+				if (startDate && value) {
+					return value.getTime() !== startDate.getTime();
+				}
+				return true
 			}),
 	});
 
