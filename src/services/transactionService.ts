@@ -49,11 +49,13 @@ export const executeTransaction = async (sourceUUID, destinationUUID, amount) =>
 };
 
 export const getTransactionLogsByRangeDate = async (startDate, endDate, sourceAccountUUID) => {
-	let rangeQuery = {}
+	let rangeQuery = {};
 	if (startDate && endDate) {
-		rangeQuery = { createdAt: Between(startDate, endDate) }
+		rangeQuery = { createdAt: Between(startDate, endDate) };
 	} else if (startDate || endDate) {
-		rangeQuery = startDate ? { createdAt: MoreThan(startDate) } : { createdAt: LessThan(startDate) }
+		rangeQuery = startDate
+			? { createdAt: MoreThan(startDate) }
+			: { createdAt: LessThan(startDate) };
 	}
 
 	let transactionLogs = await transactionRepository.find({
