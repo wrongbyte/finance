@@ -10,7 +10,7 @@ const transactionRepository = AppDataSource.getRepository(Transaction);
 export interface FormattedTransactionLog extends Omit<Transaction, 'amount' | 'id' | 'createdAt'> {
 	amount: number | string;
 	id?: number;
-	createdAt: string;
+	createdAt: string | Date;
 }
 
 export const executeTransaction = async (accountSource, accountDestination, amount) => {
@@ -42,10 +42,10 @@ export const executeTransaction = async (accountSource, accountDestination, amou
 				destinationAccountUUID: destinationUUID,
 				amount,
 			}),
-		);
+		) as FormattedTransactionLog;
 
 		transactionLog.amount = formatterBRL.format(transactionLog.amount as number / 100);
-		transactionLog.createdAt = transactionLog?.createdAt.toLocaleString('pt-BR');
+		transactionLog.createdAt = transactionLog.createdAt.toLocaleString('pt-BR');
 
 		delete transactionLog.id;
 	});
@@ -68,9 +68,9 @@ export const getTransactionLogsByRangeDate = async (startDate, endDate, sourceAc
 			sourceAccountUUID,
 			...rangeQuery,
 		},
-	});
+	}) as FormattedTransactionLog[];
 
-	transactionLogs.map((log: FormattedTransactionLog) => {
+	transactionLogs.map((log) => {
 		delete log.id;
 		log.createdAt = new Date(log.createdAt as string).toLocaleString('pt-BR');
 		log.amount = formatterBRL.format(log.amount as number / 100) as any;
