@@ -13,7 +13,7 @@ export interface FormattedTransactionLog extends Omit<Transaction, 'amount' | 'i
 	createdAt: string | Date;
 }
 
-export const executeTransaction = async (accountSource, accountDestination, amount) => {
+export const executeTransaction = async (accountSource : Account, accountDestination : Account, amount : number) => {
 	let destinationUUID = accountDestination.accountUUID;
 	let sourceUUID = accountSource.accountUUID;
 

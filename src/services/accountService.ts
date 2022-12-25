@@ -40,7 +40,7 @@ export const findAccountByUUID = async (uuid: string) : Promise<FormattedAccount
 	return account;
 };
 
-export const updateAccountBalance = async (accountUUID, updatedBalance) => {
+export const updateAccountBalance = async (accountUUID : string, updatedBalance : number) => {
 	return await accountRepository.update({ accountUUID }, { balance: updatedBalance });
 };
 
