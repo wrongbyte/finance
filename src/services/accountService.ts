@@ -6,8 +6,10 @@ import { formatterBRL } from '../utils/money';
 
 const accountRepository = AppDataSource.getRepository(Account);
 
-interface FormattedAccount extends Omit<Account, 'balance'> {
+export interface FormattedAccount extends Omit<Account, 'balance' | 'password' | 'id'> {
 	balance: number | string;
+	password?: string;
+	id?: number;
 }
 
 export const createAccount = async (
@@ -27,18 +29,23 @@ export const findAccountByDocument = async ({
 	document,
 }: {
 	document: string;
-}): Promise<Account | undefined> => {
+}): Promise<Account | null> => {
 	return await accountRepository.findOneBy({ document });
 };
 
-export const findAccountByUUID = async (uuid: string) => {
-	const account = await accountRepository.findOneBy({ accountUUID: uuid });
-	delete account.password;
-	delete account.id;
+export const findAccountByUUID = async (uuid: string) : Promise<FormattedAccount | null> => {
+	const account = await accountRepository.findOneBy({ accountUUID: uuid }) as FormattedAccount;
+	delete account?.password;
+	delete account?.id;
 	return account;
 };
 
-export const updateAccountBalance = async (accountUUID, updatedBalance) => {
+export const accountHasBalanceForTransaction = async (accountUUID : string, amountTransaction : number) => {
+	const account = await accountRepository.findOneBy({ accountUUID: accountUUID });
+	return account!.balance - amountTransaction >= 0
+};
+
+export const updateAccountBalance = async (accountUUID : string, updatedBalance : number) => {
 	return await accountRepository.update({ accountUUID }, { balance: updatedBalance });
 };
 

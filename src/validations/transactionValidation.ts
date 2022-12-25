@@ -32,9 +32,17 @@ export async function validateDatesHistory(payload) {
 				if (startDate && value) {
 					return value.getTime() !== startDate.getTime();
 				}
-				return true
+				return true;
 			}),
 	});
 
+	return await schema.validate(payload);
+}
+
+export async function validateChargeback(payload) {
+	const schema = yup.object({
+		sourceAccountUUID: yup.string().uuid().required(),
+		transactionUUID: yup.string().uuid().required(),
+	});
 	return await schema.validate(payload);
 }

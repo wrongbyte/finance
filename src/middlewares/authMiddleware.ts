@@ -9,7 +9,7 @@ const invalidTokenMessage = 'Invalid token or expired session';
 
 export const authMiddleware = async (request: Request, response: Response, next) => {
 	try {
-		let access_token = null;
+		let access_token : null | string = null;
 		if (request.headers.authorization && request.headers.authorization.startsWith('Bearer')) {
 			access_token = request.headers.authorization.split(' ')[1];
 		} else if (request.cookies.access_token) {

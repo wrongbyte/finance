@@ -50,6 +50,4 @@ transactionRouter.get('/', async (request, response, next) => {
 	}
 });
 
-// transactionRouter.post('/chargeback', getChargeback);
-
 export default transactionRouter;
