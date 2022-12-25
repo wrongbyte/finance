@@ -1,16 +1,21 @@
 {
+   "exclude": ["./coverage", "./dist", "__tests__", "jest.config.js", "commitlint.config.js"],
+   "ts-node": {
+     "transpileOnly": true,
+     "files": true
+   },
+   "typeRoots": ["./src/@types", "./node_modules/@types"],
    "compilerOptions": {
-      "lib": [
-         "es5",
-         "es6"
-      ],
-      "target": "es5",
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "outDir": "./build",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "sourceMap": true,
-      "esModuleInterop": true
+     "target": "es2016",
+     "module": "commonjs",
+     "rootDir": "./src",
+     "moduleResolution": "node",
+     "checkJs": true,
+     "outDir": "./dist",
+     "esModuleInterop": true,
+     "forceConsistentCasingInFileNames": true,
+     "strict": true,
+     "noImplicitAny": false,
+     "skipLibCheck": true
    }
 }
