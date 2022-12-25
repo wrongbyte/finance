@@ -60,7 +60,7 @@ export const getTransactionLogsByRangeDate = async (startDate, endDate, sourceAc
 	} else if (startDate || endDate) {
 		rangeQuery = startDate
 			? { createdAt: MoreThan(startDate) }
-			: { createdAt: LessThan(startDate) };
+			: { createdAt: LessThan(endDate) };
 	}
 
 	let transactionLogs = await transactionRepository.find({
