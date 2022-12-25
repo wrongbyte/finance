@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { AppError } from '../error';
 import { findAccountByDocument, findAccountByUUID } from '../services/accountService';
 import { executeTransaction, getTransactionLogsByRangeDate } from '../services/transactionService';
+import { Account } from '../entities/Account';
 
 export const registerTransaction = async ({
 	sourceAccountUUID,
@@ -34,7 +35,13 @@ export const registerTransaction = async ({
 		throw new AppError('Invalid destination account', StatusCodes.BAD_REQUEST);
 	}
 
-	return await executeTransaction(sourceAccount, destinationAccount, amount);
+	const transactionLog = await executeTransaction(sourceAccount as Account, destinationAccount, amount);
+
+	if (!transactionLog) {
+		throw new AppError('Error during transaction. Try again', StatusCodes.INTERNAL_SERVER_ERROR);
+	}
+
+	return transactionLog
 };
 
 export const getHistory = async (startDate, endDate, sourceAccountUUID) => {
