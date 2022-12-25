@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import { AppError } from '../error';
 import { findAccountByDocument, findAccountByUUID } from '../services/accountService';
-import { executeTransaction, getTransactionLogsByRangeDate } from '../services/transactionService';
+import { executeTransaction, findTransactionByUUID, getTransactionLogsByRangeDate } from '../services/transactionService';
 import { Account } from '../entities/Account';
 
 export const registerTransaction = async ({
@@ -47,7 +47,3 @@ export const registerTransaction = async ({
 export const getHistory = async (startDate, endDate, sourceAccountUUID) => {
 	return getTransactionLogsByRangeDate(startDate, endDate, sourceAccountUUID);
 };
-
-// export const getChargeback = async (request: Request, response: Response) => {
-// 	return response.status(200).json({ message: 'get chargeback' });
-// };

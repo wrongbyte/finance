@@ -13,6 +13,12 @@ export interface FormattedTransactionLog extends Omit<Transaction, 'amount' | 'i
 	createdAt: string | Date;
 }
 
+export const findTransactionByUUID = async (uuid: string) : Promise<FormattedTransactionLog | null> => {
+	const transaction = await transactionRepository.findOneBy({ transactionUUID: uuid }) as FormattedTransactionLog;
+	delete transaction?.id;
+	return transaction;
+};
+
 export const executeTransaction = async (accountSource : Account, accountDestination : Account, amount : number) => {
 	let destinationUUID = accountDestination.accountUUID;
 	let sourceUUID = accountSource.accountUUID;
