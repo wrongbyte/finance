@@ -3,16 +3,21 @@ import { Transaction } from '../entities/Transaction';
 import { formatterBRL } from '../utils/money';
 import { v4 as uuid } from 'uuid';
 import { Account } from '../entities/Account';
-import { findAccountByUUID } from './accountService';
 import { Between, LessThan, MoreThan } from 'typeorm';
 
 const transactionRepository = AppDataSource.getRepository(Transaction);
 
-export const executeTransaction = async (sourceUUID, destinationUUID, amount) => {
-	const accountSource = await findAccountByUUID(sourceUUID);
-	const accountDestination = await findAccountByUUID(destinationUUID);
+export interface FromattedTransactionLog extends Omit<Transaction, 'amount' | 'id' | 'createdAt'> {
+	amount: number | string;
+	id?: number;
+	createdAt: string;
+}
 
-	let transactionLog = null;
+export const executeTransaction = async (accountSource, accountDestination, amount) => {
+	let destinationUUID = accountDestination.accountUUID;
+	let sourceUUID = accountSource.accountUUID;
+
+	let transactionLog : null | FromattedTransactionLog = null;
 
 	await AppDataSource.transaction(async (transactionalEntityManager) => {
 		const sourceAccountUpdatedBalance = accountSource.balance - amount;
@@ -39,8 +44,8 @@ export const executeTransaction = async (sourceUUID, destinationUUID, amount) =>
 			}),
 		);
 
-		transactionLog.amount = formatterBRL.format(transactionLog.amount / 100);
-		transactionLog.createdAt = transactionLog.createdAt.toLocaleString('pt-BR');
+		transactionLog.amount = formatterBRL.format(transactionLog.amount as number / 100);
+		transactionLog.createdAt = transactionLog?.createdAt.toLocaleString('pt-BR');
 
 		delete transactionLog.id;
 	});
@@ -65,10 +70,10 @@ export const getTransactionLogsByRangeDate = async (startDate, endDate, sourceAc
 		},
 	});
 
-	transactionLogs.map((log) => {
+	transactionLogs.map((log: FromattedTransactionLog) => {
 		delete log.id;
-		log.createdAt = new Date(log.createdAt).toLocaleString('pt-BR');
-		log.amount = formatterBRL.format(log.amount / 100) as any;
+		log.createdAt = new Date(log.createdAt as string).toLocaleString('pt-BR');
+		log.amount = formatterBRL.format(log.amount as number / 100) as any;
 	});
 
 	return transactionLogs;

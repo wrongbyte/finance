@@ -13,6 +13,10 @@ export const registerTransaction = async ({
 	amount: number;
 }) => {
 	const sourceAccount = await findAccountByUUID(sourceAccountUUID);
+	
+	if (!sourceAccount) {
+		throw new AppError('Invalid account', StatusCodes.BAD_REQUEST);
+	}
 
 	if (sourceAccount.balance < amount) {
 		throw new AppError('Insufficient balance', StatusCodes.BAD_REQUEST);
@@ -26,11 +30,11 @@ export const registerTransaction = async ({
 		throw new AppError('No account found with this document', StatusCodes.BAD_REQUEST);
 	}
 
-	if (destinationAccount.document === sourceAccount.document) {
+	if (destinationAccount.document === sourceAccount?.document) {
 		throw new AppError('Invalid destination account', StatusCodes.BAD_REQUEST);
 	}
 
-	return await executeTransaction(sourceAccountUUID, destinationAccount.accountUUID, amount);
+	return await executeTransaction(sourceAccount, destinationAccount, amount);
 };
 
 export const getHistory = async (startDate, endDate, sourceAccountUUID) => {

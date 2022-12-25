@@ -6,16 +6,20 @@
    },
    "typeRoots": ["./src/@types", "./node_modules/@types"],
    "compilerOptions": {
-     "target": "es2016",
-     "module": "commonjs",
+	 "experimentalDecorators": true,
      "rootDir": "./src",
-     "moduleResolution": "node",
      "checkJs": true,
      "outDir": "./dist",
-     "esModuleInterop": true,
      "forceConsistentCasingInFileNames": true,
      "strict": true,
      "noImplicitAny": false,
-     "skipLibCheck": true
+     "skipLibCheck": true,
+     "target": "es5",
+     "module": "commonjs",
+     "moduleResolution": "node",
+     "emitDecoratorMetadata": true,
+     "experimentalDecorators": true,
+     "sourceMap": true,
+     "esModuleInterop": true
    }
 }
