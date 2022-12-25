@@ -4,7 +4,6 @@ import { formatterBRL } from '../utils/money';
 import { v4 as uuid } from 'uuid';
 import { Account } from '../entities/Account';
 import { Between, LessThan, MoreThan } from 'typeorm';
-import { FormattedAccount } from './accountService';
 
 const transactionRepository = AppDataSource.getRepository(Transaction);
 

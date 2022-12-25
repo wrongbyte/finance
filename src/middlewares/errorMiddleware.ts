@@ -14,7 +14,7 @@ export const errorMiddleware = async (error, request, response, next) => {
 		status = StatusCodes.BAD_REQUEST;
 	}
 
-	if (process.env.NODE_ENV === 'dev') {
+	if (process.env.NODE_ENV === 'dev' && !(error instanceof AppError)) {
 		console.log(error);
 	}
 
