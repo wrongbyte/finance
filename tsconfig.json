@@ -1,25 +1,25 @@
 {
-   "exclude": ["./coverage", "./dist", "__tests__", "jest.config.js", "commitlint.config.js"],
-   "ts-node": {
-     "transpileOnly": true,
-     "files": true
-   },
-   "typeRoots": ["./src/@types", "./node_modules/@types"],
-   "compilerOptions": {
-	 "experimentalDecorators": true,
-     "rootDir": "./src",
-     "checkJs": true,
-     "outDir": "./dist",
-     "forceConsistentCasingInFileNames": true,
-     "strict": true,
-     "noImplicitAny": false,
-     "skipLibCheck": true,
-     "target": "es5",
-     "module": "commonjs",
-     "moduleResolution": "node",
-     "emitDecoratorMetadata": true,
-     "experimentalDecorators": true,
-     "sourceMap": true,
-     "esModuleInterop": true
-   }
+	"exclude": ["./coverage", "./dist", "__tests__", "jest.config.js", "commitlint.config.js"],
+	"ts-node": {
+		"transpileOnly": true,
+		"files": true
+	},
+	"typeRoots": ["./src/@types", "./node_modules/@types"],
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"rootDir": "./src",
+		"checkJs": true,
+		"outDir": "./dist",
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"noImplicitAny": false,
+		"skipLibCheck": true,
+		"target": "es5",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"sourceMap": true,
+		"strictPropertyInitialization": false,
+		"esModuleInterop": true
+	}
 }
