@@ -7,7 +7,7 @@ import { Between, LessThan, MoreThan } from 'typeorm';
 
 const transactionRepository = AppDataSource.getRepository(Transaction);
 
-export interface FromattedTransactionLog extends Omit<Transaction, 'amount' | 'id' | 'createdAt'> {
+export interface FormattedTransactionLog extends Omit<Transaction, 'amount' | 'id' | 'createdAt'> {
 	amount: number | string;
 	id?: number;
 	createdAt: string;
@@ -17,7 +17,7 @@ export const executeTransaction = async (accountSource, accountDestination, amou
 	let destinationUUID = accountDestination.accountUUID;
 	let sourceUUID = accountSource.accountUUID;
 
-	let transactionLog : null | FromattedTransactionLog = null;
+	let transactionLog : null | FormattedTransactionLog = null;
 
 	await AppDataSource.transaction(async (transactionalEntityManager) => {
 		const sourceAccountUpdatedBalance = accountSource.balance - amount;
@@ -70,7 +70,7 @@ export const getTransactionLogsByRangeDate = async (startDate, endDate, sourceAc
 		},
 	});
 
-	transactionLogs.map((log: FromattedTransactionLog) => {
+	transactionLogs.map((log: FormattedTransactionLog) => {
 		delete log.id;
 		log.createdAt = new Date(log.createdAt as string).toLocaleString('pt-BR');
 		log.amount = formatterBRL.format(log.amount as number / 100) as any;
