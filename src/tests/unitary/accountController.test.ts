@@ -1,5 +1,5 @@
-import { registerAccount, authenticateAccount } from '../../controllers/accountController';
 import * as accountService from '../../services/accountService';
+import { registerAccount, authenticateAccount } from '../../controllers/accountController';
 import { userDbReturn, userInputCreate } from '../mock/user';
 import { AppError } from '../../error';
 import { Account } from '../../entities/Account';
