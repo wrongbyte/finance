@@ -1,13 +1,13 @@
 {
-	"exclude": ["./coverage", "./dist", "__tests__", "jest.config.js", "commitlint.config.js"],
+	"exclude": ["./coverage", "./dist", "__tests__", "jest.config.ts", "commitlint.config.js"],
 	"ts-node": {
 		"transpileOnly": true,
 		"files": true
 	},
-	"typeRoots": ["./src/@types", "./node_modules/@types"],
+	"typeRoots": ["./src/@types", "./node_modules/@types", "jest"],
 	"compilerOptions": {
+		"allowJs": true,
 		"experimentalDecorators": true,
-		"rootDir": "./src",
 		"checkJs": true,
 		"outDir": "./dist",
 		"forceConsistentCasingInFileNames": true,
