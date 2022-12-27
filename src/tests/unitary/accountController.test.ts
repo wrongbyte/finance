@@ -2,7 +2,6 @@ import * as accountService from '../../services/accountService';
 import { registerAccount, authenticateAccount } from '../../controllers/accountController';
 import { userDbReturn, userInputCreate } from '../mock/user';
 import { AppError } from '../../error';
-import { Account } from '../../entities/Account';
 
 const duplicateAccountError = new AppError("There's already an user with this document", 400);
 const invalidAccountError = new AppError('Invalid document or password', 400);
@@ -36,15 +35,17 @@ describe('Authenticating an account', () => {
 		jest.spyOn(accountService, 'findAccountByDocument').mockImplementationOnce(
 			async () => null,
 		);
+		expect(async () =>
+			authenticateAccount(userInputCreate.document, userInputCreate.password),
+		).rejects.toThrow(invalidAccountError);
+	});
 
-        expect(async () => authenticateAccount(userInputCreate.document, userInputCreate.password)).rejects.toThrow(
+	it('should return an error if the password is wrong', () => {
+		jest.spyOn(accountService, 'findAccountByDocument').mockImplementationOnce(
+			async () => userDbReturn as any,
+		);
+		expect(async () => authenticateAccount(userInputCreate.document, '1234')).rejects.toThrow(
 			invalidAccountError,
 		);
 	});
-
-    it ('should return an error if the password is wrong', () => {
-        expect(async () => Account.comparePasswords('1234', userInputCreate.password)).rejects.toThrow(
-			invalidAccountError,
-		);
-    })
 });
