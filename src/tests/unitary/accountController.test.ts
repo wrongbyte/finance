@@ -1,6 +1,6 @@
 import * as accountService from '../../services/accountService';
 import { registerAccount, authenticateAccount } from '../../controllers/accountController';
-import { userDbReturn, userInputCreate } from '../mock/user';
+import { userDbReturn, userInputCreate } from '../mock/account';
 import { AppError } from '../../error';
 
 const duplicateAccountError = new AppError("There's already an user with this document", 400);
@@ -29,7 +29,7 @@ describe('Registering a new account', () => {
 		);
 	});
 });
-
+// TODO: success case
 describe('Authenticating an account', () => {
 	it("should return an error if the account doesn't exists", () => {
 		jest.spyOn(accountService, 'findAccountByDocument').mockImplementationOnce(
