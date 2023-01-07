@@ -8,6 +8,17 @@ export const userDbReturn = {
 	createdAt: '2022-12-25T19:35:38.503Z',
 };
 
+export const userDbReturnPass = {
+	accountUUID: '3b493e8b-e6c5-4606-84a0-9eb826de86b8',
+	document: '12907611895',
+	balance: 'R$ 100,10',
+	firstName: 'João',
+	lastName: 'Joaquim',
+	id: 3,
+	createdAt: '2022-12-25T19:35:38.503Z',
+	password: '$2a$12$ysGG9ox4yVoiHWMxM.2G0u5E1VKiLM4r2Z19QuJq3KAo5tvi1epqi',
+};
+
 export const userInputCreate = {
 	firstName: 'João',
 	lastName: 'Joaquim',

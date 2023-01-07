@@ -20,7 +20,7 @@ export const registerAccount = async (payload: Account) => {
 
 export const authenticateAccount = async (document, password) => {
 	const account = await findAccountByDocument({ document });
-
+	console.log(account)
 	if (!account || !(await Account.comparePasswords(password, account.password))) {
 		throw new AppError('Invalid document or password', StatusCodes.BAD_REQUEST);
 	}
