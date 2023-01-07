@@ -4,7 +4,7 @@ import redisClient from '../config/redis';
 import { signJWT } from '../utils/jwt';
 import { formatterBRL } from '../utils/money';
 
-const accountRepository = AppDataSource.getRepository(Account);
+export const accountRepository = AppDataSource.getRepository(Account);
 
 export interface FormattedAccount extends Omit<Account, 'balance' | 'password' | 'id'> {
 	balance: number | string;
